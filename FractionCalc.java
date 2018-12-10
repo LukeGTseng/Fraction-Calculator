@@ -12,9 +12,6 @@ public class Fractions {
 			operator = charDetector(str);
 			if (str.equals("quit")) {
 				break;
-			} else if (operator == '0') {
-				System.out.println("Invalid operator");
-				break;
 			}
 
 			int[][] breakdown = numberbreak(str, operator);
@@ -24,6 +21,10 @@ public class Fractions {
 				System.out.println(subtract(breakdown));
 			} else if (operator == '*') {
 				System.out.println(multiply(breakdown));
+			} else if (operator == '/') {
+				System.out.println(divide(breakdown));
+			} else {
+				System.out.println("Invalid operator");
 			}
 			System.out.println(Arrays.deepToString(breakdown));
 		}
@@ -109,7 +110,12 @@ public class Fractions {
 		if (a[1][0] < 0) {
 			a[1][1] *= -1;
 		}
-		
+		if(a[0][2] == 0) {
+			a[0][2] = 1;
+		}
+		if(a[1][2] == 0) {
+			a[1][2] = 1;
+		}
 		if(a[0][0]>0) {
 			a[0][1] += a[0][0]*a[0][2];
 			a[0][0] = 0;
@@ -139,7 +145,41 @@ public class Fractions {
 		}
 	}
 
-	public static void divide(int[][] a) {
+	public static String divide(int[][] a) {
+		if (a[0][0] < 0) {
+			a[0][1] *= -1;
+		}
+		if (a[1][0] < 0) {
+			a[1][1] *= -1;
+		}
+		if(a[0][0]>0) {
+			a[0][1] += a[0][0]*a[0][2];
+			a[0][0] = 0;
+		}
+		
+		if(a[1][0]>0) {
+			a[1][1] += a[1][0]*a[1][2];
+			a[1][0] = 0;
+		}
+		int count = a[0][0] * a[1][0];
+		int total = a[0][1]*a[1][2];
+		int totalDenom = a[0][2]*a[1][1];
+		int GCD = findGCD(total, totalDenom);
+		if (GCD > 0) {
+			total /= GCD;
+			totalDenom /= GCD;
+		}
+		if (totalDenom > 0) {
+			count += total / totalDenom;
+			total = total % totalDenom;
+		}
+		if (count != 0 && total != 0 && totalDenom != 0) {
+			return count + " " + total + "/" + totalDenom;
+		} else if (total == 0 || totalDenom == 0) {
+			return count + "";
+		} else {
+			return total + "/" + totalDenom;
+		}
 	}
 
 	public static int[][] numberbreak(String str, char operator) { // break down the numerators and denominators
