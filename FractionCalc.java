@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class FractionCalc {
+public class Fractions {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		String str = "";
@@ -22,6 +22,8 @@ public class FractionCalc {
 				System.out.println(add(breakdown));
 			} else if (operator == '-') {
 				System.out.println(subtract(breakdown));
+			} else if (operator == '*') {
+				System.out.println(multiply(breakdown));
 			}
 			System.out.println(Arrays.deepToString(breakdown));
 		}
@@ -100,7 +102,41 @@ public class FractionCalc {
 		}
 	}
 
-	public static void multiply(int[][] a) {
+	public static String multiply(int[][] a) {
+		if (a[0][0] < 0) {
+			a[0][1] *= -1;
+		}
+		if (a[1][0] < 0) {
+			a[1][1] *= -1;
+		}
+		
+		if(a[0][0]>0) {
+			a[0][1] += a[0][0]*a[0][2];
+			a[0][0] = 0;
+		}
+		if(a[1][0]>0) {
+			a[1][1] += a[1][0]*a[1][2];
+			a[1][0] = 0;
+		}
+		int count = a[0][0] * a[1][0];
+		int total = a[0][1]*a[1][1];
+		int totalDenom = a[0][2]*a[1][2];
+		int GCD = findGCD(total, totalDenom);
+		if (GCD > 0) {
+			total /= GCD;
+			totalDenom /= GCD;
+		}
+		if (totalDenom > 0) {
+			count += total / totalDenom;
+			total = total % totalDenom;
+		}
+		if (count != 0 && total != 0 && totalDenom != 0) {
+			return count + " " + total + "/" + totalDenom;
+		} else if (total == 0 || totalDenom == 0) {
+			return count + "";
+		} else {
+			return total + "/" + totalDenom;
+		}
 	}
 
 	public static void divide(int[][] a) {
