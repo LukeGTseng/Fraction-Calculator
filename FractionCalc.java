@@ -4,23 +4,28 @@ public class Fractions {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		String str = "";
-		char operator;
+		String operator;
 		while (!str.equals("quit")) {
-			System.out.println("Enter an equaltion or type \"quit\"");
+			System.out.println("Enter an equation or type \"quit\"");
 			str = s.nextLine();
 			operator = charDetector(str);
 			if (str.equals("quit")) {
 				break;
 			}
-
+			if(str.contains(" / ")) {
+				str = str.replace(" / ", " | ");
+			}
+			if(operator.equals("/")) {
+				operator = "|";
+			}
 			int[][] breakdown = numberbreak(str, operator);
-			if (operator == '+') {
+			if (operator.equals("+")) {
 				System.out.println(add(breakdown));
-			} else if (operator == '-') {
+			} else if (operator.equals("-")) {
 				System.out.println(subtract(breakdown));
-			} else if (operator == '*') {
+			} else if (operator.equals("*")) {
 				System.out.println(multiply(breakdown));
-			} else if (operator == '/') {
+			} else if (operator.equals("|")) {
 				System.out.println(divide(breakdown));
 			} else {
 				System.out.println("Invalid operator");
@@ -29,20 +34,20 @@ public class Fractions {
 		}
 	}
 
-	public static char charDetector(String str) { // detecting if the operator
+	public static String charDetector(String str) { // detecting if the operator
 		if (str.indexOf('*') > 0) {
-			return '*';
+			return "*";
 		}
 		if (str.indexOf(" / ") > 0) {
-			return '/';
+			return "/";
 		}
 		if (str.indexOf('+') > 0) {
-			return '+';
+			return "*";
 		}
 		if (str.indexOf(" - ") > 0) {
-			return '-';
+			return "-";
 		}
-		return '0';
+		return "0";
 	}
 
 	public static String add(int[][] a) {
@@ -82,16 +87,16 @@ public class Fractions {
 			a[1][1] *= -1;
 		}
 		int count = 0;
-		int total = ((a[0][1] * a[1][2]) - (a[0][2] * a[1][1]));
-		total += a[0][0]*a[0][2];
-		total += a[1][0]*a[1][2];
+		int total = a[0][0]*a[0][2];
+		total += ((a[0][1] * a[1][2]) - (a[0][2] * a[1][1]));
+		total -= a[1][0]*a[1][2];
 		int totalDenom = (a[0][2] * a[1][2]);
 		int GCD = findGCD(total, totalDenom);
 		if (GCD > 0) {
 			total /= GCD;
 			totalDenom /= GCD;
 		}
-		if (totalDenom > 0) {
+		if (totalDenom > 0 && total > totalDenom) {
 			count += total / totalDenom;
 			total = total % totalDenom;
 		}
@@ -154,25 +159,37 @@ public class Fractions {
 		}
 	}
 
-	public static String divide(int[][] a) {
+	public static String divide(int[][] a) { //credit from calculatorsoup.com/calculators/math/fractions.php
+		int count = 0;
 		if (a[0][0] < 0) {
 			a[0][1] *= -1;
 		}
 		if (a[1][0] < 0) {
 			a[1][1] *= -1;
 		}
-		if(a[0][0]>0) {
+		if(a[0][2] == 0) {
+			a[0][2] = 1;
+		}
+		if(a[1][2] == 0) {
+			a[1][2] = 1;
+		}
+		if(a[0][0] != 0) {
 			a[0][1] += a[0][0]*a[0][2];
 			a[0][0] = 0;
 		}
-		
-		if(a[1][0]>0) {
+		if(a[1][0] != 0) {
 			a[1][1] += a[1][0]*a[1][2];
 			a[1][0] = 0;
 		}
-		int count = a[0][0] * a[1][0];
-		int total = a[0][1]*a[1][2];
-		int totalDenom = a[0][2]*a[1][1];
+		int tempnum = a[1][1];
+		a[1][1] = a[1][2];
+		a[1][2] = tempnum;
+		int total = a[1][1] * a[0][1];
+		int totalDenom = a[0][2] * a[1][2];
+		if(totalDenom < 0) {
+			totalDenom *= -1;
+			total *= -1;
+		}
 		int GCD = findGCD(total, totalDenom);
 		if (GCD > 0) {
 			total /= GCD;
@@ -189,13 +206,16 @@ public class Fractions {
 		} else {
 			return total + "/" + totalDenom;
 		}
+
 	}
 
-	public static int[][] numberbreak(String str, char operator) { // break down the numerators and denominators
+	public static int[][] numberbreak(String str, String operator) { // break down the numerators and denominators
+		System.out.println(str);
+		System.out.println(operator);
 		String str1 = str.substring(0, str.indexOf(operator) - 1);
 		String str2 = str.substring(str.indexOf(operator) + 2, str.length());
 		int[][] a = new int[2][3];
-		if (!str1.contains("/")) {
+		if (!str1.contains(" | ")) {
 			a[0][0] = Integer.parseInt(str1);
 		} else if (str1.contains("_")) {
 			a[0][0] = Integer.parseInt(str1.substring(0, str1.indexOf('_')));
@@ -205,7 +225,7 @@ public class Fractions {
 			a[0][1] = Integer.parseInt(str1.substring(0, str1.indexOf('/')));
 			a[0][2] = Integer.parseInt(str1.substring(str1.indexOf('/') + 1, str1.length()));
 		}
-		if (!str2.contains("/")) {
+		if (!str2.contains(" | ")) {
 			a[1][0] = Integer.parseInt(str2);
 		} else if (str2.contains("_")) {
 			a[1][0] = Integer.parseInt(str2.substring(0, str2.indexOf('_')));
