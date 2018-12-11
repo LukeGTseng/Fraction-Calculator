@@ -74,6 +74,9 @@ public class FractionCalc {
 			total = total % totalDenom;
 		}
 		if (count != 0 && total != 0 && totalDenom != 0) {
+			if(count < 0 && total < 0) {
+				total *= -1;
+			}
 			return count + " " + total + "/" + totalDenom;
 		} else if (total == 0 || totalDenom == 0) {
 			return count + "";
@@ -157,6 +160,9 @@ public class FractionCalc {
 			total = total % totalDenom;
 		}
 		if (count != 0 && total != 0 && totalDenom != 0) {
+			if(count < 0 && total < 0) {
+				total *= -1;
+			}
 			return count + " " + total + "/" + totalDenom;
 		} else if (total == 0 || totalDenom == 0) {
 			return count + "";
@@ -206,6 +212,9 @@ public class FractionCalc {
 			total = total % totalDenom;
 		}
 		if (count != 0 && total != 0 && totalDenom != 0) {
+			if(count < 0 && total < 0) {
+				total *= -1;
+			}
 			return count + " " + total + "/" + totalDenom;
 		} else if (total == 0 || totalDenom == 0) {
 			return count + "";
