@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Fractions {
+public class FractionCalc {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		String str = "";
@@ -61,6 +61,9 @@ public class Fractions {
 		total += a[1][1] * a[0][2];
 		int count = a[0][0] + a[1][0];
 		int totalDenom = a[0][2] * a[1][2];
+		if(total<0) {
+			
+		}
 		int GCD = findGCD(total, totalDenom);
 		if (GCD > 0) {
 			total /= GCD;
@@ -87,20 +90,23 @@ public class Fractions {
 			a[1][1] *= -1;
 		}
 		int count = 0;
-		int total = a[0][0]*a[0][2];
-		total += ((a[0][1] * a[1][2]) - (a[0][2] * a[1][1]));
-		total -= a[1][0]*a[1][2];
-		int totalDenom = (a[0][2] * a[1][2]);
+		int nom1 = a[1][2] *(a[0][0] * a[0][2] + a[0][1]);
+		int nom2 = a[0][2] * (a[1][0] * a[1][2] + a[1][1]);
+		int total = nom1 - nom2;
+		int totalDenom = a[0][2] * a[1][2];
 		int GCD = findGCD(total, totalDenom);
 		if (GCD > 0) {
 			total /= GCD;
 			totalDenom /= GCD;
 		}
-		if (totalDenom > 0 && total > totalDenom) {
+		if (totalDenom > 0) {
 			count += total / totalDenom;
 			total = total % totalDenom;
 		}
 		if (count != 0 && total != 0 && totalDenom != 0) {
+			if(count < 0 && total < 0) {
+				total *= -1;
+			}
 			return count + " " + total + "/" + totalDenom;
 		} else if (total == 0 || totalDenom == 0) {
 			return count + "";
