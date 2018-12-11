@@ -7,7 +7,6 @@ public class Fractions {
 		char operator;
 		while (!str.equals("quit")) {
 			System.out.println("Enter an equaltion or type \"quit\"");
-
 			str = s.nextLine();
 			operator = charDetector(str);
 			if (str.equals("quit")) {
@@ -82,8 +81,10 @@ public class Fractions {
 		if (a[1][0] < 0) {
 			a[1][1] *= -1;
 		}
-		int count = a[0][0] - a[1][0];
+		int count = 0;
 		int total = ((a[0][1] * a[1][2]) - (a[0][2] * a[1][1]));
+		total += a[0][0]*a[0][2];
+		total += a[1][0]*a[1][2];
 		int totalDenom = (a[0][2] * a[1][2]);
 		int GCD = findGCD(total, totalDenom);
 		if (GCD > 0) {
@@ -110,17 +111,25 @@ public class Fractions {
 		if (a[1][0] < 0) {
 			a[1][1] *= -1;
 		}
+		if (a[0][2] < 0) {
+			a[0][2] *= -1;
+			a[1][1] *= -1;
+		}
+		if (a[1][2] < 0) {
+			a[1][2] *= -1;
+			a[0][1] *= -1;
+		}
 		if(a[0][2] == 0) {
 			a[0][2] = 1;
 		}
 		if(a[1][2] == 0) {
 			a[1][2] = 1;
 		}
-		if(a[0][0]>0) {
+		if(a[0][0] != 0) {
 			a[0][1] += a[0][0]*a[0][2];
 			a[0][0] = 0;
 		}
-		if(a[1][0]>0) {
+		if(a[1][0] != 0) {
 			a[1][1] += a[1][0]*a[1][2];
 			a[1][0] = 0;
 		}
