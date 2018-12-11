@@ -35,13 +35,13 @@ public class Fractions {
 	}
 
 	public static String charDetector(String str) { // detecting if the operator
-		if (str.indexOf('*') > 0) {
-			return "*";
+		if (str.indexOf('+') > 0) {
+			return "+";
 		}
 		if (str.indexOf(" / ") > 0) {
 			return "/";
 		}
-		if (str.indexOf('+') > 0) {
+		if (str.indexOf('*') > 0) {
 			return "*";
 		}
 		if (str.indexOf(" - ") > 0) {
@@ -210,12 +210,10 @@ public class Fractions {
 	}
 
 	public static int[][] numberbreak(String str, String operator) { // break down the numerators and denominators
-		System.out.println(str);
-		System.out.println(operator);
 		String str1 = str.substring(0, str.indexOf(operator) - 1);
 		String str2 = str.substring(str.indexOf(operator) + 2, str.length());
 		int[][] a = new int[2][3];
-		if (!str1.contains(" | ")) {
+		if (!str1.contains("/")) {
 			a[0][0] = Integer.parseInt(str1);
 		} else if (str1.contains("_")) {
 			a[0][0] = Integer.parseInt(str1.substring(0, str1.indexOf('_')));
@@ -225,7 +223,7 @@ public class Fractions {
 			a[0][1] = Integer.parseInt(str1.substring(0, str1.indexOf('/')));
 			a[0][2] = Integer.parseInt(str1.substring(str1.indexOf('/') + 1, str1.length()));
 		}
-		if (!str2.contains(" | ")) {
+		if (!str2.contains("/")) {
 			a[1][0] = Integer.parseInt(str2);
 		} else if (str2.contains("_")) {
 			a[1][0] = Integer.parseInt(str2.substring(0, str2.indexOf('_')));
